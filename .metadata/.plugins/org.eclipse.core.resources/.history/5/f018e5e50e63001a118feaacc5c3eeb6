@@ -1,0 +1,144 @@
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import javax.swing.JOptionPane;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import java.math.*;
+import java.util.Arrays;
+
+public class MartianTimeLeoKay {
+
+	protected Shell shlMartianTimeBy;
+
+	/**
+	 * Launch the application.
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		try {
+			MartianTimeLeoKay window = new MartianTimeLeoKay();
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Open the window.
+	 */
+	public void open() {
+		Display display = Display.getDefault();
+		createContents();
+		shlMartianTimeBy.open();
+		shlMartianTimeBy.layout();
+		while (!shlMartianTimeBy.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+	}
+
+	/**
+	 * Create contents of the window.
+	 */
+	protected void createContents() {
+		shlMartianTimeBy = new Shell();
+		shlMartianTimeBy.setSize(284, 165);
+		shlMartianTimeBy.setText("Martian Time by Leo Kay");
+		
+		Label lblClickTheButton = new Label(shlMartianTimeBy, SWT.NONE);
+		lblClickTheButton.setBounds(10, 10, 414, 15);
+		lblClickTheButton.setText("Click the button below to convert days to sols!");
+		
+		Button btnConvert = new Button(shlMartianTimeBy, SWT.NONE);
+		btnConvert.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//variables
+				double earthSeconds = 24 * 60 * 60;
+				double marsSeconds = (24 * 60 * 60) + (37 * 60) + 22.663;
+				double ratio = earthSeconds / marsSeconds;
+				
+				double earthDays;
+				double earthHours;
+				double earthMins;
+				double updatedDays;
+				double updatedHours;
+				double updatedMins;
+				
+				double marsHours;
+				double marsMins;
+				double currentMarsDays;
+				double currentMarsHours;
+				double currentMarsMins;
+				
+				String[] time = new String[3];
+				
+				//buffered reader and writer
+				BufferedReader reader;
+				BufferedWriter writer;
+				
+				//get the mars time
+				try {
+					//read the input file and get the output file
+					reader = new BufferedReader(new FileReader("Input.txt"));
+					writer = new BufferedWriter(new FileWriter("Output.txt"));
+					
+					//read the first line
+					String line = reader.readLine();
+					
+					//read the next line while it's not null
+					while (line != null) {
+						//get the times
+						time = line.split("\\s+");
+						
+						//get the earth days, hours, and mins
+						earthDays = Double.parseDouble(time[0]);
+						earthHours = Double.parseDouble(time[1]);
+						earthMins = Double.parseDouble(time[2]);
+						
+						//get the updated earth days, hours, and mins
+						updatedDays = earthDays - 1;
+						updatedHours = (updatedDays * 24) + earthHours;
+						updatedMins = (updatedHours * 60) + earthMins;
+						
+						//get the mars hours
+						marsMins = ratio * updatedMins;
+						marsHours = marsMins / 60;
+						
+						//get the current mars days, hours, and mins
+						currentMarsDays = (marsHours / 24) + 1;
+						currentMarsHours = (currentMarsDays * 24) % 24;
+						currentMarsMins = (currentMarsHours * 60) % 60;
+						
+						//display the answer
+						writer.write("Days: " + Math.round(currentMarsDays) + "   Hours: " + Math.round(currentMarsHours) + "   Mins: " + Math.round(currentMarsMins));
+						writer.newLine();
+						
+						//read the next line, this is the weights for the next set of students
+						line = reader.readLine();
+					}
+					//close the reader and writer
+					reader.close();
+					writer.close();
+				} catch (Exception e1){
+					//display an error box
+					JOptionPane.showMessageDialog(null, "Please enter the correct information", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnConvert.setBounds(80, 50, 105, 51);
+		btnConvert.setText("Convert");
+
+	}
+}

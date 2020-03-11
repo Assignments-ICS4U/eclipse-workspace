@@ -1,0 +1,10 @@
+Passed: 6   Fail: 12   Max: 86   Min: 16
+Passed: 14   Fail: 21   Max: 91   Min: 6
+Passed: 3   Fail: 6   Max: 59   Min: 22
+Passed: 5   Fail: 6   Max: 86   Min: 23
+Passed: 8   Fail: 10   Max: 79   Min: 2
+Passed: 19   Fail: 16   Max: 96   Min: 2
+Passed: 5   Fail: 1   Max: 82   Min: 20
+Passed: 3   Fail: 2   Max: 79   Min: 41
+Passed: 10   Fail: 8   Max: 91   Min: 14
+Passed: 5   Fail: 6   Max: 64   Min: 20
